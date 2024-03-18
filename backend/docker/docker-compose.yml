@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  nodeapp:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    ports:
+      - "3000:3000"
+  mysqldb:
+    image: mysql:8.3
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: recipesdb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123456
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    volumes:
+      - recipesdatabase:/var/lib/mysql
+     # - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  recipesdatabase:
